@@ -1,0 +1,73 @@
+<app-loading [condition]="isLoading"></app-loading>
+
+<app-toast [message]="toast.message"></app-toast>
+
+<div class="card" *ngIf="!isLoading">
+  <h4 class="card-header">Ingredientes</h4>
+  <div class="card-block">
+    <table class="table table-bordered table-striped">
+      <thead class="thead-default">
+        <tr>
+          <th>Tipo do Ingrediente</th>
+          <th>Quantidade</th>
+          <th>Valor</th>  
+          <th>Ação</th>          
+        </tr>
+      </thead>
+      <tbody *ngIf="ingredientes.length === 0">
+        <tr>
+          <td colspan="4">Não existem ingredientes cadastrados.</td>
+        </tr>  
+      </tbody>
+      <tbody>
+        <tr *ngFor="let ingrediente of ingredientes">
+          <td>{{ingrediente.tipo}}</td>
+          <td>{{ingrediente.quantidade}}</td>
+          <td>{{ingrediente.valor | currency:'BRL':true:'1.2-2'}}</td>
+          <td><button class="btn btn-sm btn-danger" *ngIf="!(ingrediente.tipo == 'Hambúrguer de carne' || ingrediente.tipo == 'Queijo' || ingrediente.tipo == 'Alface' || ingrediente.tipo == 'Bacon')" (click)="deleteIngrediente(ingrediente)"><i class="fa fa-trash"></i> Excluir</button>
+            <button class="btn btn-sm btn-warning" (click)="enableEditing(ingrediente)"><i class="fa fa-pencil"></i> Editar</button>
+          </td>
+        </tr>  
+      </tbody>
+      <tbody *ngIf="isEditing">
+        <tr>
+          <td colspan="5">
+            <form class="form-inline" #form="ngForm" (ngSubmit)="editIngrediente(ingrediente)" style="display:inline">
+              <div class="form-group">
+                  <input class="form-control" type="text" name="tipo" [(ngModel)]="ingrediente.tipo" placeholder="Tipo" required>
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="number" name="quantidade" [(ngModel)]="ingrediente.quantidade" placeholder="Quantidade" min="0" required>
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="text" name="valor" [(ngModel)]="ingrediente.valor" placeholder="Valor" step="any" min="0" required>
+              </div>
+              <div class="form-group">
+              <button class="btn btn-sm btn-primary" type="submit" [disabled]="!form.form.valid"><i class="fa fa-floppy-o"></i> Salvar</button>
+              <button class="btn btn-sm btn-warning" (click)="cancelaEdicao()"><i class="fa fa-times"></i> Cancelar</button>
+
+              </div>
+            </form>            
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="card" *ngIf="!isEditing">
+  <h4 class="card-header">Adicionar Novo Ingrediente</h4>
+  <div class="card-block">
+    <form class="form-inline" [formGroup]="addIngredienteForm" (ngSubmit)="addIngrediente()" style="text-align:center">
+      <div class="form-group">
+          <input class="form-control" type="text" name="tipo" formControlName="tipo" placeholder="Tipo">
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="number" name="quantidade" formControlName="quantidade" placeholder="Quantidade" min="1">
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="number" name="valor" formControlName="valor" placeholder="Valor">
+      </div>            
+      <button class="btn btn-primary" type="submit" [disabled]="!addIngredienteForm.valid"><i class="fa fa-floppy-o"></i> Criar</button>
+    </form>
+  </div>
+</div>

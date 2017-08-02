@@ -1,0 +1,58 @@
+<app-loading [condition]="isLoading"></app-loading>
+
+<app-toast [message]="toast.message"></app-toast>
+
+<div class="card" *ngIf="!isLoading">
+  <h4 class="card-header">Lanches</h4>
+  <div class="card-block">
+    <table class="table table-bordered table-striped">
+      <thead class="thead-default">
+        <tr>
+          <th>Nome</th>
+          <th>Ingredientes</th>
+          <th>Valor Unitário</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="lanches.length === 0">
+        <tr>
+          <td colspan="5">Ainda não existem Lanches cadastrados. Crie Agora mesmo um novo lanche.</td>
+        </tr>  
+      </tbody>
+      <tbody *ngIf="!isEditing">
+        <tr *ngFor="let lanche of lanches">
+          <td>{{lanche.nome}}</td>
+          <td>
+              <div *ngFor="let ingrediente of lanche.ingredientes">
+                {{ingrediente.tipo}} - {{ingrediente.quantidade}}
+              </div>            
+          </td>
+          <td>{{getTotal(lanche.valor, lanche.quantidade) | currency:'BRL':true:'1.2-2'}}</td>
+          <td> 
+             <button class="btn btn-sm btn-danger" (click)="deleteLanche(lanche)"><i class="fa fa-trash"></i> Excluir</button>
+          </td>
+        </tr>  
+      </tbody>      
+    </table>
+  </div>
+</div>
+
+<div class="card" *ngIf="!isEditing">
+  <h4 class="card-header">Adicionar Novo Lanche</h4>
+  <div class="card-block">
+    <form class="form-inline" [formGroup]="addLancheForm" (ngSubmit)="addLanche()" style="text-align:center">
+      <div class="form-group">
+          <input class="form-control" type="text" name="nome" formControlName="nome" placeholder="Nome">
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="number" name="quantidade" formControlName="quantidade" placeholder="Quantidade" min="1">
+      </div>
+      <div class="form-group">
+        <select class="form-control" multiple name="ingredientes" formControlName="ingredientes" required [(ngModel)]="lanche.ingredientes">
+          <option *ngFor="let ingrediente of ingredientes" [ngValue]="ingrediente">{{ingrediente.tipo}}</option>
+        </select> 
+      </div>           
+      <button class="btn btn-primary" type="submit" [disabled]="!addLancheForm.valid"><i class="fa fa-floppy-o"></i> Criar</button>
+    </form>
+  </div>
+</div>

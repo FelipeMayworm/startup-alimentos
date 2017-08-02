@@ -1,0 +1,19 @@
+<div class="container">
+
+  <nav class="navbar navbar-dark bg-primary-bar">
+    <div class="nav navbar-nav">
+      <a routerLink="/" class="nav-item nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+        <i class="fa fa-home"></i> Home
+      </a>
+      <a routerLink="/lanches" class="nav-item nav-link" routerLinkActive="active">
+        <i class="fa fa-list"></i> Lanches
+      </a>
+      <a routerLink="/ingredientes" class="nav-item nav-link" routerLinkActive="active">
+        <i class="fa fa-list"></i> Ingredientes
+      </a>
+    </div>
+  </nav>
+
+  <router-outlet></router-outlet>
+
+</div>

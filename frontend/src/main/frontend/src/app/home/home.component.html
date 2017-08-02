@@ -1,0 +1,47 @@
+<app-loading [condition]="isLoading"></app-loading>
+
+<app-toast [message]="toast.message"></app-toast>
+
+<div class="card" *ngIf="!isLoading">
+  <h4 class="card-header">Lanches</h4>
+  <div class="card-block">
+  	<table class="table">         
+      <form class="form-inline" #form="ngForm" style="display:inline">   	
+      	<tr *ngFor="let lanche of lanches">
+      		<td colspan="5">        		
+    			<div class="form-group" style="width: 150px">
+    				{{lanche.nome}}
+    			</div>
+    			<div class="form-group">
+    				<input class="form-control" type="number" name="quantidade" [(ngModel)]="lanche.quantidade" placeholder="Quantidade" min="1" required>		        
+    			</div>
+    			<div class="form-group" style="width: 150px; text-align: center">
+    				{{getTotal(lanche.valor, lanche.quantidade) | currency:'BRL':true:'1.2-2'}}    				
+    			</div>
+    			<div class="form-group">
+    				<button class="btn btn-sm btn-success" (click)="askLanche(lanche)"><i class="fa fa-floppy-o"></i> Pedir</button>
+    			</div>        		
+        	</td>	                    
+	    </tr>   
+	    </form>             
+    </table>
+    <table class="table table-bordered" *ngIf="isPedido">
+      	<thead class="thead-default">
+	        <tr>
+	          <th>Lanche Pedido</th>
+	          <th>Quantidade</th>
+	          <th>Valor</th>
+	          <th>Ação</th>  	                  
+	        </tr>
+      	</thead>
+  		<tbody>
+	        <tr>
+	          <td>{{lanche.nome}}</td>
+	          <td>{{lanche.quantidade}}</td>
+	          <td>{{lanche.valor | currency:'BRL':true:'1.2-2'}}</td>	          
+	          <td><button class="btn btn-sm btn-danger" (click)="fecharPedido()"><i class="fa fa-trash"></i> Fechar</button></td>
+	        </tr>  
+      	</tbody>
+    </table>
+  </div>
+</div>
